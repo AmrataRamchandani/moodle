@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/quiz/accessrule/useripmapping/db" VERSION="20170809" COMMENT="XMLDB file for Moodle mod/quiz/accessrule/useripmapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="user_ip_mapping" COMMENT="table to map user_id with ip address to restrict the attempt of quiz from that ip address only.">
+      <FIELDS>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="ip" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="user can attempt quiz from this ip address only."/>        
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="userid"/>
+      </KEYS>
+    </TABLE>    
+    <TABLE NAME="quizaccess_useripmapping" COMMENT="Stores the additional setting required by this accessrule">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="quizid"/>
+        <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Foreign key to quiz.id." PREVIOUS="id" NEXT="useripmappingrequired"/>
+        <FIELD NAME="useripmappingrequired" TYPE="int" LENGTH="2" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="Boolean, if true, the check is required." PREVIOUS="quizid"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="quizid"/>
+        <KEY NAME="quizid" TYPE="foreign-unique" FIELDS="quizid" REFTABLE="quiz" REFFIELDS="id" PREVIOUS="primary"/>
+      </KEYS>
+    </TABLE>
+    
+  </TABLES>
+</XMLDB>
