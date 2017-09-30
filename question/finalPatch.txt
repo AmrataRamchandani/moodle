@@ -1,0 +1,185 @@
+diff --git a/mod/quiz/attempt.php b/mod/quiz/attempt.php
+index 96b8e1c..1a52f43 100644
+--- a/mod/quiz/attempt.php
++++ b/mod/quiz/attempt.php
+@@ -41,6 +41,13 @@ $attemptid = required_param('attempt', PARAM_INT);
+ $page = optional_param('page', 0, PARAM_INT);
+ 
+ $attemptobj = quiz_attempt::create($attemptid);
++
++// Check for clear button option and insert corresponding JS.
++if($attemptobj->get_quiz()->enableclear) {
++	$PAGE->requires->js( '/lib/jquery/jquery-3.1.0.min.js');
++	$PAGE->requires->js( '/mod/quiz/clearbutton.js');
++}
++
+ $page = $attemptobj->force_page_number_into_range($page);
+ $PAGE->set_url($attemptobj->attempt_url(null, $page));
+ 
+diff --git a/mod/quiz/clearbutton.js b/mod/quiz/clearbutton.js
+new file mode 100644
+index 0000000..3d2dacc
+--- /dev/null
++++ b/mod/quiz/clearbutton.js
+@@ -0,0 +1,26 @@
++jQuery(function ($) {
++	if ( $("input[type]").is(":radio") )
++	{
++	$( ".answer" ).append( "<button type='button' name='clear' >Clear</button>");
++	}
++
++	if ( $('.content').parent().hasClass( "deferredfeedback" ) )
++	{
++	    if ( $('.answer .r0 input').prop('disabled') )
++	      {
++	        $("button[name=clear]").remove();
++	       }
++	}
++	else
++	{
++	if(!($('div.im-controls').length)  )
++	{
++	$("button[name=clear]").remove();
++	}
++	}
++
++	$('button[name=clear]').on('click', function() {
++	    $(this).closest('.answer').find(':radio').prop('checked', false)
++	});
++
++});
+diff --git a/mod/quiz/db/install.xml b/mod/quiz/db/install.xml
+index d41ecbc..78765e1 100644
+--- a/mod/quiz/db/install.xml
++++ b/mod/quiz/db/install.xml
+@@ -20,6 +20,7 @@
+         <FIELD NAME="canredoquestions" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Allows students to redo any completed question within a quiz attempt."/>
+         <FIELD NAME="attempts" TYPE="int" LENGTH="6" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The maximum number of attempts a student is allowed."/>
+         <FIELD NAME="attemptonlast" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Whether subsequent attempts start from teh answer to the previous attempt (1) or start blank (0)."/>
++        <FIELD NAME="enableclear" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Whether the clear button should be enabled for multichoice questions"/>
+         <FIELD NAME="grademethod" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="One of the values QUIZ_GRADEHIGHEST, QUIZ_GRADEAVERAGE, QUIZ_ATTEMPTFIRST or QUIZ_ATTEMPTLAST."/>
+         <FIELD NAME="decimalpoints" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="2" SEQUENCE="false" COMMENT="Number of decimal points to use when displaying grades."/>
+         <FIELD NAME="questiondecimalpoints" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="-1" SEQUENCE="false" COMMENT="Number of decimal points to use when displaying question grades. (-1 means use decimalpoints.)"/>
+diff --git a/mod/quiz/lang/en/quiz.php b/mod/quiz/lang/en/quiz.php
+index aab2fcf..9957d46 100644
+--- a/mod/quiz/lang/en/quiz.php
++++ b/mod/quiz/lang/en/quiz.php
+@@ -183,6 +183,7 @@ $string['configdelay1'] = 'If you set a time delay, then a student has to wait f
+ $string['configdelay1st2nd'] = 'If you set a time delay here, the student cannot start their second attempt until this much time has passed since the end of their first attempt.';
+ $string['configdelay2'] = 'If you set a time delay here, then a student has to wait for that time before they can attempt their third or later attempts.';
+ $string['configeachattemptbuildsonthelast'] = 'If multiple attempts are allowed then each new attempt contains the results of the previous attempt.';
++$string['configenableclearbutton'] = 'If enabled, the clear button will be added in the quiz with multichoice questions in order to support an option to clear selected radio buttons';
+ $string['configgrademethod'] = 'When multiple attempts are allowed, which method should be used to calculate the student\'s final grade for the quiz.';
+ $string['configintro'] = 'The values you set here define the default values that are used in the settings form when you create a new quiz. You can also configure which quiz settings are considered advanced.';
+ $string['configmaximumgrade'] = 'The default grade that the quiz grade is scaled to be out of.';
+@@ -319,6 +320,8 @@ otherwise your attempt will not be counted.';
+ $string['emailoverduesmall'] = 'You did not submit your attempt at {$a->quizname}. Please go to {$a->attemptsummaryurl} before {$a->attemptgraceend} if you would still like to submit.';
+ $string['emailoverduesubject'] = 'Attempt now overdue: {$a->quizname}';
+ $string['empty'] = 'Empty';
++$string['enableclearbutton'] = 'Enable clear button for single answer questions';
++$string['enableclearbutton_help'] = 'If enabled, the clear button will be added in the quiz with multichoice questions in order to support an option to clear selected radio buttons';
+ $string['enabled'] = 'Enabled';
+ $string['endtest'] = 'Finish attempt ...';
+ $string['erroraccessingreport'] = 'You cannot access this report';
+diff --git a/mod/quiz/mod_form.php b/mod/quiz/mod_form.php
+index 615c66f..2767930 100644
+--- a/mod/quiz/mod_form.php
++++ b/mod/quiz/mod_form.php
+@@ -216,6 +216,12 @@ class mod_quiz_mod_form extends moodleform_mod {
+             $mform->disabledIf('attemptonlast', 'attempts', 'eq', 1);
+         }
+ 
++        // Enable clear button for single answer questions.
++        $mform->addElement('selectyesno', 'enableclear', get_string('enableclearbutton', 'quiz'));
++        $mform->addHelpButton('enableclear', 'enableclearbutton', 'quiz');
++        $mform->setAdvanced('enableclear', $quizconfig->enableclear_adv);
++        $mform->setDefault('enableclear', $quizconfig->enableclear);
++        
+         // -------------------------------------------------------------------------------
+         $mform->addElement('header', 'reviewoptionshdr',
+                 get_string('reviewoptionsheading', 'quiz'));
+diff --git a/mod/quiz/settings.php b/mod/quiz/settings.php
+index ef504ce..4d7852d 100644
+--- a/mod/quiz/settings.php
++++ b/mod/quiz/settings.php
+@@ -135,6 +135,11 @@ if ($ADMIN->fulltree) {
+             get_string('configeachattemptbuildsonthelast', 'quiz'),
+             array('value' => 0, 'adv' => true)));
+ 
++    // Clear Button for multichoice questions.
++    $quizsettings->add(new admin_setting_configcheckbox_with_advanced('quiz/enableclear',
++    		get_string('enableclearbutton', 'quiz'), get_string('configenableclearbutton', 'quiz'),
++    		array('value' => 0, 'adv' => true)));
++    
+     // Review options.
+     $quizsettings->add(new admin_setting_heading('reviewheading',
+             get_string('reviewoptionsheading', 'quiz'), ''));
+diff --git a/question/engine/questionattempt.php b/question/engine/questionattempt.php
+index fa110dd..1f7ab6d 100644
+--- a/question/engine/questionattempt.php
++++ b/question/engine/questionattempt.php
+@@ -408,6 +408,17 @@ class question_attempt {
+         return end($this->steps);
+     }
+ 
++    // Get the last step which has data as answer or _order of a particular question.
++    public function get_unfinished_step() {
++    	foreach($this -> get_reverse_step_iterator() as $step) {
++    		$name = array('answer', '_order');
++    		foreach($name as $key) {
++    			if ($step -> has_qt_var($key))
++    				return $key;
++    		}
++    	}
++    }
++    
+     /**
+      * @return boolean whether this question_attempt has autosaved data from
+      * some time in the past.
+@@ -1230,6 +1241,15 @@ class question_attempt {
+     public function process_action($submitteddata, $timestamp = null, $userid = null, $existingstepid = null) {
+         $pendingstep = new question_attempt_pending_step($submitteddata, $timestamp, $userid, $existingstepid);
+         $this->discard_autosaved_step();
++        
++        /** While clearing the quiz option,we are trying to bring the question attempt step data to '_order' 
++         * and we could find that '_order' data only in initial step i.e step[0] **/
++        
++        if( empty($submitteddata)){
++        	$step_zero_data = $this->steps[0]->get_all_data();
++        	$pendingstep->set_data($step_zero_data);
++        }
++        
+         if ($this->behaviour->process_action($pendingstep) == self::KEEP) {
+             $this->add_step($pendingstep);
+             if ($pendingstep->response_summary_changed()) {
+diff --git a/question/engine/questionattemptstep.php b/question/engine/questionattemptstep.php
+index c0bb6fd..6e73c17 100644
+--- a/question/engine/questionattemptstep.php
++++ b/question/engine/questionattemptstep.php
+@@ -370,6 +370,12 @@ class question_attempt_step {
+         return $this->data;
+     }
+ 
++    // Setting Step Data.
++    public function set_data($data){
++    	$this->data = $data;
++    }
++    
++    
+     /**
+      * Set a metadata variable.
+      *
+diff --git a/question/type/multichoice/question.php b/question/type/multichoice/question.php
+index 09b9493..459e598 100644
+--- a/question/type/multichoice/question.php
++++ b/question/type/multichoice/question.php
+@@ -259,7 +259,8 @@ class qtype_multichoice_single_question extends qtype_multichoice_base {
+     }
+ 
+     public function get_response(question_attempt $qa) {
+-        return $qa->get_last_qt_var('answer', -1);
++    		$laststep_name=$qa->get_unfinished_step();
++    		return $qa->get_last_qt_var($laststep_name, -1);
+     }
+ 
+     public function is_choice_selected($response, $value) {

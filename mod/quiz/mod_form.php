@@ -216,6 +216,12 @@ class mod_quiz_mod_form extends moodleform_mod {
             $mform->disabledIf('attemptonlast', 'attempts', 'eq', 1);
         }
 
+        // Enable clear button for single answer questions.
+        $mform->addElement('selectyesno', 'enableclear', get_string('enableclearbutton', 'quiz'));
+        $mform->addHelpButton('enableclear', 'enableclearbutton', 'quiz');
+        $mform->setAdvanced('enableclear', $quizconfig->enableclear_adv);
+        $mform->setDefault('enableclear', $quizconfig->enableclear);
+        
         // -------------------------------------------------------------------------------
         $mform->addElement('header', 'reviewoptionshdr',
                 get_string('reviewoptionsheading', 'quiz'));

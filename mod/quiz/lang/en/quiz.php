@@ -183,6 +183,7 @@ $string['configdelay1'] = 'If you set a time delay, then a student has to wait f
 $string['configdelay1st2nd'] = 'If you set a time delay here, the student cannot start their second attempt until this much time has passed since the end of their first attempt.';
 $string['configdelay2'] = 'If you set a time delay here, then a student has to wait for that time before they can attempt their third or later attempts.';
 $string['configeachattemptbuildsonthelast'] = 'If multiple attempts are allowed then each new attempt contains the results of the previous attempt.';
+$string['configenableclearbutton'] = 'If enabled, the clear button will be added in the quiz with multichoice questions in order to support an option to clear selected radio buttons';
 $string['configgrademethod'] = 'When multiple attempts are allowed, which method should be used to calculate the student\'s final grade for the quiz.';
 $string['configintro'] = 'The values you set here define the default values that are used in the settings form when you create a new quiz. You can also configure which quiz settings are considered advanced.';
 $string['configmaximumgrade'] = 'The default grade that the quiz grade is scaled to be out of.';
@@ -319,6 +320,8 @@ otherwise your attempt will not be counted.';
 $string['emailoverduesmall'] = 'You did not submit your attempt at {$a->quizname}. Please go to {$a->attemptsummaryurl} before {$a->attemptgraceend} if you would still like to submit.';
 $string['emailoverduesubject'] = 'Attempt now overdue: {$a->quizname}';
 $string['empty'] = 'Empty';
+$string['enableclearbutton'] = 'Enable clear button for single answer questions';
+$string['enableclearbutton_help'] = 'If enabled, the clear button will be added in the quiz with multichoice questions in order to support an option to clear selected radio buttons';
 $string['enabled'] = 'Enabled';
 $string['endtest'] = 'Finish attempt ...';
 $string['erroraccessingreport'] = 'You cannot access this report';

@@ -20,6 +20,7 @@
         <FIELD NAME="canredoquestions" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Allows students to redo any completed question within a quiz attempt."/>
         <FIELD NAME="attempts" TYPE="int" LENGTH="6" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The maximum number of attempts a student is allowed."/>
         <FIELD NAME="attemptonlast" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Whether subsequent attempts start from teh answer to the previous attempt (1) or start blank (0)."/>
+        <FIELD NAME="enableclear" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Whether the clear button should be enabled for multichoice questions"/>
         <FIELD NAME="grademethod" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="One of the values QUIZ_GRADEHIGHEST, QUIZ_GRADEAVERAGE, QUIZ_ATTEMPTFIRST or QUIZ_ATTEMPTLAST."/>
         <FIELD NAME="decimalpoints" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="2" SEQUENCE="false" COMMENT="Number of decimal points to use when displaying grades."/>
         <FIELD NAME="questiondecimalpoints" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="-1" SEQUENCE="false" COMMENT="Number of decimal points to use when displaying question grades. (-1 means use decimalpoints.)"/>

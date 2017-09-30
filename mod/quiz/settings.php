@@ -135,6 +135,11 @@ if ($ADMIN->fulltree) {
             get_string('configeachattemptbuildsonthelast', 'quiz'),
             array('value' => 0, 'adv' => true)));
 
+    // Clear Button for multichoice questions.
+    $quizsettings->add(new admin_setting_configcheckbox_with_advanced('quiz/enableclear',
+    		get_string('enableclearbutton', 'quiz'), get_string('configenableclearbutton', 'quiz'),
+    		array('value' => 0, 'adv' => true)));
+    
     // Review options.
     $quizsettings->add(new admin_setting_heading('reviewheading',
             get_string('reviewoptionsheading', 'quiz'), ''));
