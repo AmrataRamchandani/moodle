@@ -1,18 +1,22 @@
 jQuery(function($) {
 
-    if ($("input[type]").is(":radio")) {
-        $(".answer").append("<button type='button' name='clear' >Clear</button>");
+    if ($("input[type=radio]")) {
+        $(".answer").append("<button type='button' name='clear'>Clear</button>");
     }
 
-    $('button[name=clear]').hide();
+    $("button[name=clear]").hide();
+
+    $("input[type='radio']:checked").each(function(e) {
+        $(this).closest('.answer').find("button[name=clear]").show();
+    });
 
     $("input[type=radio]").on('click', function() {
-        $('button[name=clear]').show();
+        $(this).closest('.answer').find('button[name=clear]').show();
     });
 
     $('button[name=clear]').on('click', function() {
         $(this).closest('.answer').find(':radio').prop('checked', false);
-        $('button[name=clear]').hide();
+        $(this).hide();
     });
 
     if ($('.content').parent().hasClass("deferredfeedback")) {

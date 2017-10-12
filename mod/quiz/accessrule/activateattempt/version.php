@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Version information for the quizaccess_activateattempt plugin.
@@ -30,4 +30,4 @@ $plugin->version = 2017051500;
 $plugin->requires = 2017050500;
 $plugin->component = 'quizaccess_activateattempt';
 $plugin->maturity  = MATURITY_RC;
-$plugin->release   = '1.0.2';
+$plugin->release   = '1.0.3';

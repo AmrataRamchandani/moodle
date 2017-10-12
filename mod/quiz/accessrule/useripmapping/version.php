@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for the quizaccess_ipaddress plugin.
+ * Version information for the quizaccess_useripmapping plugin.
  *
- * @package    quizaccess
- * @subpackage useripmapping
+ * @package    quizaccess_useripmapping
+ * @author     Amrata Ramchandani <ramchandani.amrata@gmail.com>
  * @copyright  2017 Indian Institute Of Technology,Bombay,India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,6 +27,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 
-$plugin->version   = 2017051500;
-$plugin->requires  = 2017050500;
+$plugin->version   = 2017101200;
+$plugin->requires  = 2017051500;
 $plugin->component = 'quizaccess_useripmapping';
+$plugin->maturity  = MATURITY_RC;
+$plugin->release   = '1.0.0';

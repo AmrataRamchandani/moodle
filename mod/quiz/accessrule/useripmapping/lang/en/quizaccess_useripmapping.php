@@ -15,37 +15,50 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for the quizaccess_ipaddress plugin.
+ * Strings for the quizaccess_useripmapping plugin.
  *
- * @package    quizaccess
- * @subpackage useripmapping
+ * @package    quizaccess_useripmapping
+ * @author     Amrata Ramchandani <ramchandani.amrata@gmail.com>
  * @copyright  2017 Indian Institute Of Technology,Bombay,India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 defined('MOODLE_INTERNAL') || die();
-
-
-$string['pluginname'] = 'USER-IP Mapping quiz access rule';
-$string['subnetwrong'] = 'This computer is not on the allowed list.';
-$string['useripmappingrequired'] = 'Use Student-IP Mappings for attempting the quiz';
-$string['useripmappingrequired_help'] = 'If you enable this option, students will be able to attempt the quiz only from the assigned IP Address';
-$string['notrequired'] = 'No';
-$string['useripmappingrequiredoption'] = 'Yes';
-$string['useriplist'] = 'Import Student-IP Mappings List';
-
-$string['viewuseriplist'] = 'View Student-IP Mappings List';
-
-$string['uploadheader'] = 'Upload Student-IP Address Mappings';
-$string['file'] = 'File';
-$string['csvdelimiter'] = 'CSV delimiter';
-$string['trialstatus'] = 'Trial Status';
-$string['useripcsvline'] = 'User IP CSV line';
-$string['uploadmappings'] = 'Upload Mappings';
-$string['viewheader'] = 'View and Edit Student-IP Mappings List';
-$string['viewthelist'] = 'View';
-$string['username'] = 'Student Name';
-$string['idnumber'] = 'Roll Number';
-$string['addip'] = 'Add Mapping';
-$string['uploaduseripmappingresult'] = 'Uploaded Student-IP Mappings List';
+$string['encoding']                         = 'Encoding';
+$string['pluginname']                       = 'USER-IP Mapping quiz access rule';
+$string['subnetwrong']                      = "This computer's IP Address does not match with the assigned IP Address";
+$string['useripmappingrequiredadd']         = 'Use Student-IP Mappings for attempting the quiz';
+$string['useripmappingrequiredadd_help']    = 'If you enable this option, students will be able to attempt the quiz only from the assigned IP Address.
+Create this quiz and then edit quiz settings to manage student-ip mapping.';
+$string['useripmappingrequiredupdate']      = 'Use Student-IP Mappings for attempting the quiz';
+$string['useripmappingrequiredupdate_help'] = 'If you enable this option, students will be able to attempt the quiz only from the assigned IP Address.';
+$string['allowifunassigned']                = 'Allow Unmapped';
+$string['allowifunassigned_help']           = 'If you enable this option,
+If not all the enrolled students have been assigned the IP Address,then whether they should be allowed to attempt the quiz ? In short,
+Yes -> Allow all,Deny some.
+No -> Deny all,Allow some.';
+$string['notrequired']                      = 'No';
+$string['useripmappingrequiredoption']      = 'Yes';
+$string['useriplist']                       = 'Import Student-IP Mappings List';
+$string['rowpreviewnum']                    = 'Preview rows';
+$string['viewuseriplist']                   = 'View Student-IP Mappings List';
+$string['uploadheader']                     = 'Upload Student-IP Address Mappings';
+$string['file']                             = 'File';
+$string['csvdelimiter']                     = 'CSV delimiter';
+$string['trialstatus']                      = 'Trial Status';
+$string['useripcsvline']                    = 'User IP CSV line';
+$string['uploadmappings']                   = 'Upload Mappings';
+$string['uploadmappings_help']              = 'Student-IP mappings should be uploaded via csv file.The format of the file should be as follows:
+    
+    
+* Each line of the file contains one record
+* Each record is a series of data separated by commas (or other delimiters)
+* The first record contains a list of fieldnames defining the format of the rest of the file
+* Required fieldnames are username,ip';
+$string['editheader']                       = 'Edit Student-IP Mappings List';
+$string['viewthelist']                      = 'View';
+$string['username']                         = 'Student Name';
+$string['idnumber']                         = 'Roll Number';
+$string['addip']                            = 'Add Mapping';
+$string['uploaduseripmappingresult']        = 'Uploaded Student-IP Mappings List';
+$string['uploaduseripmappingpreview']       = 'Upload Mappings Preview';

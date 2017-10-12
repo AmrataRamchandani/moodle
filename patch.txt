@@ -100,7 +100,13 @@ index 0000000..8631a0b
 +        $(".answer").append("<button type='button' name='clear' >Clear</button>");
 +    }
 +
-+    $('button[name=clear]').hide();
++    if ($("input[type=radio]:checked").length > 0) {
++    	$('button[name=clear]').show();
++    }
++    else{
++    	$('button[name=clear]').hide();
++    	}
++    
 +
 +    $("input[type=radio]").on('click', function() {
 +        $('button[name=clear]').show();
