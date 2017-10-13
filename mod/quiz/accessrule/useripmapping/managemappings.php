@@ -47,8 +47,7 @@ $PAGE->set_url($CFG->wwwroot . '/mod/quiz/accessrule/useripmapping/managemapping
     'courseid' => $courseid,
     'cmid' => $cmid
 ));
-$PAGE->navbar->add("Edit Settings", new moodle_url('/course/modedit.php',array ('update'=>$cmid,'return'=>1)));
-$PAGE->navbar->add("Manage Student-IP Mappings", $returnurl);
+
 $PAGE->requires->jquery();
 
 echo $OUTPUT->header();
@@ -71,4 +70,5 @@ echo html_writer::tag('br', '');
 echo html_writer::tag('a', 'Edit Student-IP Mappings', array(
     'href' => $editmappingurl
 ));
+
 echo $OUTPUT->footer();

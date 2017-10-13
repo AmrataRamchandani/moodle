@@ -296,7 +296,7 @@ class mod_quiz_mod_form extends moodleform_mod {
         $mform->addHelpButton('quizpassword', 'requirepassword', 'quiz');
         $mform->setAdvanced('quizpassword', $quizconfig->password_adv);
         $mform->setDefault('quizpassword', $quizconfig->password);
-
+        
         // IP address.
         $mform->addElement('text', 'subnet', get_string('requiresubnet', 'quiz'));
         $mform->setType('subnet', PARAM_TEXT);
@@ -323,16 +323,18 @@ class mod_quiz_mod_form extends moodleform_mod {
             $mform->disabledIf('delay2', 'attempts', 'eq', 1);
             $mform->disabledIf('delay2', 'attempts', 'eq', 2);
         }
-
+        
         // Browser security choices.
         $mform->addElement('select', 'browsersecurity', get_string('browsersecurity', 'quiz'),
                 quiz_access_manager::get_browser_security_choices());
         $mform->addHelpButton('browsersecurity', 'browsersecurity', 'quiz');
         $mform->setAdvanced('browsersecurity', $quizconfig->browsersecurity_adv);
         $mform->setDefault('browsersecurity', $quizconfig->browsersecurity);
-
+        
         // Any other rule plugins.
         quiz_access_manager::add_settings_form_fields($this, $mform);
+        
+       
 
         // -------------------------------------------------------------------------------
         $mform->addElement('header', 'overallfeedbackhdr', get_string('overallfeedback', 'quiz'));

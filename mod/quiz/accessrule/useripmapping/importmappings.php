@@ -63,9 +63,9 @@ $PAGE->set_url($CFG->wwwroot . '/mod/quiz/accessrule/useripmapping/importmapping
     'courseid' => $courseid,
     'cmid' => $cmid
 ));
-$PAGE->navbar->add("Edit Settings", new moodle_url('/course/modedit.php',array ('update'=>$cmid,'return'=>1)));
-$PAGE->navbar->add("Manage Student-IP Mappings", $returntomanageurl);
-$PAGE->navbar->add('Import Student IP Mappings', $returnurl);
+// $PAGE->navbar->add("Edit Settings", new moodle_url('/course/modedit.php',array ('update'=>$cmid,'return'=>1)));
+// $PAGE->navbar->add("Manage Student-IP Mappings", $returntomanageurl);
+// $PAGE->navbar->add('Import Student IP Mappings', $returnurl);
 
 $STD_FIELDS       = array(
     'username',

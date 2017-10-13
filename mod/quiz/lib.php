@@ -1807,6 +1807,7 @@ function quiz_extend_settings_navigation($settings, $quiznode) {
                 navigation_node::TYPE_SETTING, null, 'mod_quiz_groupoverrides');
         $quiznode->add_node($node, $beforekey);
 
+        
         $node = navigation_node::create(get_string('useroverrides', 'quiz'),
                 new moodle_url($url, array('mode'=>'user')),
                 navigation_node::TYPE_SETTING, null, 'mod_quiz_useroverrides');
@@ -1821,6 +1822,15 @@ function quiz_extend_settings_navigation($settings, $quiznode) {
         $quiznode->add_node($node, $beforekey);
     }
 
+//     if (has_capability('mod/quiz:manage', $PAGE->cm->context)) {
+//         $node = navigation_node::create('Manage Mappings',
+//             new moodle_url('/mod/quiz/accessrule/useripmapping/managemappings.php', array('cmid'=>$PAGE->cm->id)),
+//             navigation_node::TYPE_SETTING, null, 'quiz_accessrule_useripmapping',
+//             new pix_icon('t/edit', ''));
+//         $quiznode->add_node($node, $beforekey);
+//     }
+    
+    
     if (has_capability('mod/quiz:preview', $PAGE->cm->context)) {
         $url = new moodle_url('/mod/quiz/startattempt.php',
                 array('cmid'=>$PAGE->cm->id, 'sesskey'=>sesskey()));
@@ -1830,6 +1840,30 @@ function quiz_extend_settings_navigation($settings, $quiznode) {
         $quiznode->add_node($node, $beforekey);
     }
 
+    // Manage Quiz Access Rules
+    if (has_capability('mod/quiz:manage', $PAGE->cm->context)) {
+        
+        $quizaccessrules = core_component::get_plugin_list('quizaccess');
+        
+        $url = new moodle_url('/course/modedit.php',
+            array('update' => $PAGE->cm->id, 'return' => 1));
+        $accessrulenode = $quiznode->add_node(navigation_node::create(get_string('subplugintype_quizaccess_plural','quiz'), $url ,
+            navigation_node::TYPE_SETTING,
+            null, null, new pix_icon('i/settings', '')), $beforekey);
+
+        foreach ($quizaccessrules as $accessrule => $dir) {
+            $libfile = $CFG->dirroot.'/mod/quiz/accessrule/'.$accessrule.'/lib.php';
+            if (file_exists($libfile)) {
+                require_once($libfile);
+                $accessrulefunction = $accessrule.'_accessrule_extend_navigation';
+                if (function_exists($accessrule.'_accessrule_extend_navigation')) {
+                    $accessrulefunction($accessrulenode, $PAGE->cm);
+                }
+            }
+        }
+    }
+    
+    
     if (has_any_capability(array('mod/quiz:viewreports', 'mod/quiz:grade'), $PAGE->cm->context)) {
         require_once($CFG->dirroot . '/mod/quiz/report/reportlib.php');
         $reportlist = quiz_report_list($PAGE->cm->context);

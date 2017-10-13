@@ -76,35 +76,37 @@ to get it assigned in order to attempt this quiz.";
     }
     public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform)
     {
-        $buttonarray   = array();
-        $buttonarray[] = $mform->createElement('select', 'useripmappingrequired', get_string('useripmappingrequired', 'quizaccess_useripmapping'), array(
+        $useripmappingarray = array();
+        $useripmappingarray[] = $mform->createElement('select', 'useripmappingrequired', get_string('useripmappingrequired', 'quizaccess_useripmapping'), array(
             0 => get_string('notrequired', 'quizaccess_useripmapping'),
             1 => get_string('useripmappingrequiredoption', 'quizaccess_useripmapping')
         ));
-        $buttonarray[] = $mform->createElement('advcheckbox', 'allowifunassigned', '', 'Allow Unmapped', '', array(
+        $useripmappingarray[] = $mform->createElement('checkbox', 'allowifunassigned', '', 'Allow Unmapped', '', array(
             0,
             1
         ));
         $mform->disabledIf('allowifunassigned', 'useripmappingrequired', 'neq', 1);
         $quizid = $quizform->get_instance();
-        if (!empty($quizid)) {
-            $manageip           = new moodle_url("/mod/quiz/accessrule/useripmapping/managemappings.php", array(
+        if (! empty($quizid)) {
+            $manageip = new moodle_url("/mod/quiz/accessrule/useripmapping/managemappings.php", array(
                 'quizid' => $quizid,
                 'courseid' => $quizform->get_course()->id,
                 'cmid' => $quizform->get_coursemodule()->id
             ));
             $hyperlink_manageip = "&nbsp;&nbsp;&nbsp;&nbsp;<a href=$manageip>Manage Student-IP Mappings</a>";
-            $buttonarray[]      = $mform->createElement('static', 'manageiplist', '', $hyperlink_manageip);
-            $mform->addGroup($buttonarray, 'buttonar', get_string('useripmappingrequiredupdate', 'quizaccess_useripmapping'), array(
+            $useripmappingarray[] = $mform->createElement('static', 'manageiplist', '', $hyperlink_manageip);
+            $mform->addGroup($useripmappingarray, 'enableuseripmapping', get_string('useripmappingrequiredupdate', 'quizaccess_useripmapping'), array(
                 ' '
             ), false);
-            $mform->addHelpButton('buttonar', 'useripmappingrequiredupdate', 'quizaccess_useripmapping');
+            $mform->addHelpButton('enableuseripmapping', 'useripmappingrequiredupdate', 'quizaccess_useripmapping');
         } else {
-            $mform->addGroup($buttonarray, 'buttonar', get_string('useripmappingrequiredadd', 'quizaccess_useripmapping'), array(
+            $mform->addGroup($useripmappingarray, 'enableuseripmapping', get_string('useripmappingrequiredadd', 'quizaccess_useripmapping'), array(
                 ' '
             ), false);
-            $mform->addHelpButton('buttonar', 'useripmappingrequiredadd', 'quizaccess_useripmapping');
-        }
+            $mform->addHelpButton('enableuseripmapping', 'useripmappingrequiredadd', 'quizaccess_useripmapping');
+  }
+        $mform->setAdvanced('enableuseripmapping', true);
+
     }
     public static function save_settings($quiz)
     {
