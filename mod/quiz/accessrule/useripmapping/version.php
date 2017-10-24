@@ -27,7 +27,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 
-$plugin->version   = 2017101200;
+$plugin->version   = 2017102400;
 $plugin->requires  = 2017051500;
 $plugin->component = 'quizaccess_useripmapping';
 $plugin->maturity  = MATURITY_RC;

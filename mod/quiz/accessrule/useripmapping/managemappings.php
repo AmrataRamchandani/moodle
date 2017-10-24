@@ -40,8 +40,8 @@ $returnurl = new moodle_url('/mod/quiz/accessrule/useripmapping/managemappings.p
     'cmid' => $cmid
 ));
 
-$PAGE->set_title('Manage IP Mappings');
-$PAGE->set_heading('Manage Student-IP Mappings');
+$PAGE->set_title('Manage user-IP Mappings');
+$PAGE->set_heading('Manage user-IP Mappings');
 $PAGE->set_url($CFG->wwwroot . '/mod/quiz/accessrule/useripmapping/managemappings.php', array(
     'quizid' => $quizid,
     'courseid' => $courseid,
@@ -63,11 +63,11 @@ $editmappingurl   = new moodle_url("/mod/quiz/accessrule/useripmapping/editmappi
     'cmid' => $cmid
 ));
 
-echo html_writer::tag('a', 'Import Student-IP Mappings', array(
+echo html_writer::tag('a', get_string('importmapping', 'quizaccess_useripmapping'), array(
     'href' => $importmappingurl
 ));
 echo html_writer::tag('br', '');
-echo html_writer::tag('a', 'Edit Student-IP Mappings', array(
+echo html_writer::tag('a', get_string('editmapping', 'quizaccess_useripmapping'), array(
     'href' => $editmappingurl
 ));
 

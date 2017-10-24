@@ -56,16 +56,16 @@ $returnurl         = new moodle_url('/mod/quiz/accessrule/useripmapping/importma
     'cmid' => $cmid
 ));
 
-$PAGE->set_title('Import Student IP Mappings');
-$PAGE->set_heading('Import Student IP Mappings');
+$PAGE->set_title(get_string('importmapping', 'quizaccess_useripmapping'));
+$PAGE->set_heading(get_string('importmapping', 'quizaccess_useripmapping'));
 $PAGE->set_url($CFG->wwwroot . '/mod/quiz/accessrule/useripmapping/importmappings.php', array(
     'quizid' => $quizid,
     'courseid' => $courseid,
     'cmid' => $cmid
 ));
-// $PAGE->navbar->add("Edit Settings", new moodle_url('/course/modedit.php',array ('update'=>$cmid,'return'=>1)));
-// $PAGE->navbar->add("Manage Student-IP Mappings", $returntomanageurl);
-// $PAGE->navbar->add('Import Student IP Mappings', $returnurl);
+$PAGE->navbar->add(get_string('accessrules', 'quizaccess_useripmapping'),null);
+$PAGE->navbar->add(get_string('useripmapping', 'quizaccess_useripmapping'), $returntomanageurl);
+$PAGE->navbar->add(get_string('importmapping', 'quizaccess_useripmapping'), $returnurl);
 
 $STD_FIELDS       = array(
     'username',
@@ -102,7 +102,6 @@ if (empty($iid)) {
     } else {
         echo $OUTPUT->header();
         echo $OUTPUT->heading_with_help(get_string('uploadmappings', 'quizaccess_useripmapping'), 'uploadmappings', 'quizaccess_useripmapping');
-        echo "<br>";
         $mform->display();
         echo $OUTPUT->footer();
         die();
@@ -184,7 +183,7 @@ None of the IP Mappings were added.Please try again</div>";
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading('Upload mappings preview');
+echo $OUTPUT->heading(get_string('uploadmappingspreview', 'quizaccess_useripmapping'));
 $data = array();
 $cir->init();
 $linenum              = 1; // column header is first line
@@ -207,9 +206,7 @@ while ($fields = $cir->next()) {
         'username' => $fields[0]
     ));
     $rowcols              = array();
-    $rowcols['Sr. No']    = $linenum;
-    $rowcols['csvlineno'] = $linenum+1;
-    $rowcols['quizname']  = $quizname;
+
     if (empty($fields[0]) && empty($fields[1])) {
         $bothfieldsmissing++;
     } elseif (empty($fields[0]) && !empty($fields[1])) {
@@ -250,12 +247,9 @@ $table                      = new html_table();
 $table->id                  = "useriplistpreview";
 $table->attributes['class'] = 'generaltable';
 $table->head                = array(
-    'Sr. No',
-    'CSV Line No',
-    'Quiz Name',
-    'User Name',
-    'IP Address',
-    'Student Status'
+    'Username',
+    'IP address',
+    'User status'
 );
 $table->data                = $data;
 echo html_writer::tag('div', html_writer::table($table), array(
@@ -266,13 +260,13 @@ echo "<div class='alert alert-info'>
 <br>
 Total no. of entries in the file : " . ($readcount-1) . "</div>";
 if ($countofnotenrolled > 0 || $countofnotregistered > 0) {
-    echo "<div class='alert alert-warning'>
-<b>Note</b><br>Following Mappings will be skipped while adding the mappings for this course's quiz<ol>";
+        echo "<div class='alert alert-warning'>
+<b>Warning</b><br>Following mappings will be skipped<ol>";
     if ($countofnotenrolled > 0) {
-        echo "<li>Students who are not enrolled in this course : $countofnotenrolled</li>";
+        echo "<li>Number of users who are not enrolled in this course : $countofnotenrolled</li>";
     }
     if ($countofnotregistered > 0) {
-        echo "<li>Students who are not registered on Moodle : $countofnotregistered</li>";
+        echo "<li>Number of users who are not registered on this moodle instance : $countofnotregistered</li>";
     }
     echo "</ol></div>";
 }

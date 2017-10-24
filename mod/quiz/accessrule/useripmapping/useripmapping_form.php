@@ -96,11 +96,9 @@ class quizaccess_store_useripmapping_list extends moodleform
         $mform->addElement('hidden', 'missingips');
         $mform->addElement('hidden', 'bothfieldsmissing');
         $actionbuttons = array();
-        $actionbuttons[] =& $mform->createElement('submit', 'submit', 'Submit');
-        $actionbuttons[] =& $mform->createElement('cancel', 'cancel', 'Cancel');
-        $mform->addGroup($actionbuttons, 'actionbuttons', '', array(
-            ' '
-        ), false);
+        $actionbuttons[] =& $mform->createElement('submit', 'submit', get_string('confirm', 'quizaccess_useripmapping'));
+        $actionbuttons[] =& $mform->createElement('cancel', 'cancel', get_string('cancel', 'quizaccess_useripmapping'));
+        $mform->addGroup($actionbuttons, 'actionbuttons', '', array( ' '), false);
         $mform->disabledIf('submit', 'missingusernames', 'neq', 0);
         $mform->disabledIf('submit', 'missingips', 'neq', 0);
         $mform->disabledIf('submit', 'bothfieldsmissing', 'neq', 0);
@@ -122,7 +120,7 @@ class quizaccess_edit_useripmapping_list extends moodleform
     {
         $mform = $this->_form;
         $mform->addElement('text', 'username', get_string('username', 'quizaccess_useripmapping'));
-        $mform->addElement('html', '<div form-group row  fitem  " id="hide1" >');
+        $mform->addElement('html', '<div form-group row  fitem id="hide1" >');
         $mform->addElement('html', '<div class="col-md-3" >');
         $mform->addElement('html', '</div>');
         $mform->addElement('html', '<div id="suggestionbox" class="col-md-9" >');

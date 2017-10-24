@@ -27,8 +27,8 @@ require_once('../../../../config.php');
 global $DB;
 if (!empty($_POST["keyword"])) {
     $name      = $_POST["keyword"];
-    $sql       = "SELECT * FROM (SELECT CONCAT(firstname, ' ', lastname) as fullname FROM mdl_user) base WHERE fullname LIKE '%" . $name . "%' ";
-    $usernames = $DB->get_fieldset_sql($sql);
+    $usernamesql       = "SELECT * FROM (SELECT CONCAT(firstname, ' ', lastname) as fullname FROM mdl_user) base WHERE fullname LIKE '%" . $name . "%' ";
+    $usernames = $DB->get_fieldset_sql($usernamesql);
     if (count($usernames) > 0) {
         foreach ($usernames as $username) {
             echo "<li>$username</li>";

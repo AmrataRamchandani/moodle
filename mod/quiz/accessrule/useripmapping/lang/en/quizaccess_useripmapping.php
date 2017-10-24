@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
  * Strings for the quizaccess_useripmapping plugin.
  *
@@ -22,43 +21,42 @@
  * @copyright  2017 Indian Institute Of Technology,Bombay,India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
-$string['encoding']                         = 'Encoding';
-$string['pluginname']                       = 'USER-IP Mapping quiz access rule';
-$string['subnetwrong']                      = "This computer's IP Address does not match with the assigned IP Address";
-$string['useripmappingrequiredadd']         = 'Use Student-IP Mappings for attempting the quiz';
-$string['useripmappingrequiredadd_help']    = 'If you enable this option, students will be able to attempt the quiz only from the assigned IP Address.
-Create this quiz and then edit quiz settings to manage student-ip mapping.';
-$string['useripmappingrequiredupdate']      = 'Use Student-IP Mappings for attempting the quiz';
-$string['useripmappingrequiredupdate_help'] = 'If you enable this option, students will be able to attempt the quiz only from the assigned IP Address.';
-$string['allowifunassigned']                = 'Allow Unmapped';
-$string['allowifunassigned_help']           = 'If you enable this option,
-If not all the enrolled students have been assigned the IP Address,then whether they should be allowed to attempt the quiz ? In short,
-Yes -> Allow all,Deny some.
-No -> Deny all,Allow some.';
-$string['notrequired']                      = 'No';
-$string['useripmappingrequiredoption']      = 'Yes';
-$string['useriplist']                       = 'Import Student-IP Mappings List';
-$string['rowpreviewnum']                    = 'Preview rows';
-$string['viewuseriplist']                   = 'View Student-IP Mappings List';
-$string['uploadheader']                     = 'Upload Student-IP Address Mappings';
-$string['file']                             = 'File';
-$string['csvdelimiter']                     = 'CSV delimiter';
-$string['trialstatus']                      = 'Trial Status';
-$string['useripcsvline']                    = 'User IP CSV line';
-$string['uploadmappings']                   = 'Upload Mappings';
-$string['uploadmappings_help']              = 'Student-IP mappings should be uploaded via csv file.The format of the file should be as follows:
+
+$string['accessrules']                 = 'Access rules';
+$string['cancel']                      = 'Cancel';
+$string['confirm']                     = 'Confirm mapping';
+$string['csvdelimiter']                = 'CSV delimiter';
+$string['editmapping']                 = 'Edit user-IP mapping';
+$string['encoding']                    = 'Encoding';
+$string['file']                        = 'File';
+$string['idnumber']                    = 'User ID';
+$string['importmapping']               = 'Import user-IP mappings';
+$string['ipmismatchmessage1']          = 'You are being assigned :<b>';
+$string['ipmismatchmessage2']          = "</b> IP Address to attempt the quiz and this computer's
+IP address does not match with the assigned one.";
+$string['ipnotassignedmessage']        = 'You have not been assigned any IP address to attempt this quiz,please contact your
+instructor to get it assigned in order to attempt this quiz.';
+$string['notrequired']                 = 'No';
+$string['pluginname']                  = 'User-IP Mapping quiz access rule';
+$string['rowpreviewnum']               = 'Preview rows';
+$string['subnetwrong']                 = "This computer's IP Address does not match with the assigned IP Address";
+$string['useripmapping']               = 'User-IP mapping';
+$string['useripmappingrequired']       = 'Enable user-IP mapping';
+$string['useripmappingrequired_help']  = 'If you enable this option, users will be able to attempt this quiz only from the 
+specific IP address mapped against their name. On enabling this,user-IP mapping can be managed in the quiz administration block.
+If allow unmapped is checked,users who have not been mapped any IP will also be able to attempt the quiz';
+$string['useripmappingrequiredoption'] = 'Yes';
+$string['uploadmappings']              = 'Upload mapping';
+$string['uploadmappings_help']         = 'User-IP mapping should be uploaded via a CSV file.
+The format of the file is as follows:
     
-    
-* Each line of the file contains one record
-* Each record is a series of data separated by commas (or other delimiters)
-* The first record contains a list of fieldnames defining the format of the rest of the file
-* Required fieldnames are username,ip';
-$string['editheader']                       = 'Edit Student-IP Mappings List';
-$string['viewthelist']                      = 'View';
-$string['username']                         = 'Student Name';
-$string['idnumber']                         = 'Roll Number';
-$string['addip']                            = 'Add Mapping';
-$string['uploaduseripmappingresult']        = 'Uploaded Student-IP Mappings List';
-$string['uploaduseripmappingpreview']       = 'Upload Mappings Preview';
+* First line is:username,ip
+* Each following line contains one record containing the username and mapped IP address
+* The field values are separated by a comma (or other delimiters)
+';
+$string['username']                    = 'User name';
+$string['uploadmappingspreview']       = 'Upload mappings preview';
+$string['viewthelist']                 = 'View';
+
+

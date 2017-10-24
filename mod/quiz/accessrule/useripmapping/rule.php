@@ -51,26 +51,27 @@ class quizaccess_useripmapping extends quiz_access_rule_base
         $username = $_SESSION['USER']->username;
         global $DB;
         $quizid            = $this->quiz->id;
-        $sql1              = "SELECT allowifunassigned FROM mdl_quizaccess_enable_mappings WHERE quizid=$quizid";
-        $allowifunassigned = $DB->get_field_sql($sql1);
-        $sql               = "SELECT ip FROM mdl_quizaccess_useripmappings WHERE username='$username' and quizid=$quizid order by timecreated DESC limit 1";
-        $mapped_ip_address = $DB->get_field_sql($sql);
+        $allowifunassignedsql  = "SELECT allowifunassigned FROM mdl_quizaccess_enable_mappings WHERE quizid=$quizid";
+        $allowifunassigned = $DB->get_field_sql($allowifunassignedsql);
+        $ipsql               = "SELECT ip FROM mdl_quizaccess_useripmappings WHERE username='$username' and quizid=$quizid order by timecreated DESC limit 1";
+        $mapped_ip_address = $DB->get_field_sql($ipsql);
         $remoteaddr        = getremoteaddr();
+        $ipmismatchmessage1 = get_string('$ipmismatchmessage1', 'quizaccess_useripmapping');
+        $ipmismatchmessage2 = get_string('$ipmismatchmessage2', 'quizaccess_useripmapping');
+        $ipnotassignedmessage= get_string('ipnotassignedmessage', 'quizaccess_useripmapping');
         if ($allowifunassigned) {
             if (empty($mapped_ip_address))
                 return false;
                 elseif (address_in_subnet(getremoteaddr(), $mapped_ip_address)) {
                     return false;
                 } else {
-                    return "You are being assigned :<b> $mapped_ip_address </b> IP Address to attempt the quiz and this computer's
-IP address does not match with the assigned one.";
+                    return "$ipmismatchmessage1.$mapped_ip_address.$ipmismatchmessage2";
                 }
         } else {
             if (address_in_subnet(getremoteaddr(), $mapped_ip_address)) {
                 return false;
             } else {
-                return "You have not been assigned any IP address to attempt this quiz,please contact your instructor
-to get it assigned in order to attempt this quiz.";
+                return $ipnotassignedmessage ;
             }
         }
     }
@@ -81,32 +82,16 @@ to get it assigned in order to attempt this quiz.";
             0 => get_string('notrequired', 'quizaccess_useripmapping'),
             1 => get_string('useripmappingrequiredoption', 'quizaccess_useripmapping')
         ));
-        $useripmappingarray[] = $mform->createElement('checkbox', 'allowifunassigned', '', 'Allow Unmapped', '', array(
+        $useripmappingarray[] = $mform->createElement('advcheckbox', 'allowifunassigned', '', 'Allow Unmapped', '', array(
             0,
             1
         ));
         $mform->disabledIf('allowifunassigned', 'useripmappingrequired', 'neq', 1);
-        $quizid = $quizform->get_instance();
-        if (! empty($quizid)) {
-            $manageip = new moodle_url("/mod/quiz/accessrule/useripmapping/managemappings.php", array(
-                'quizid' => $quizid,
-                'courseid' => $quizform->get_course()->id,
-                'cmid' => $quizform->get_coursemodule()->id
-            ));
-            $hyperlink_manageip = "&nbsp;&nbsp;&nbsp;&nbsp;<a href=$manageip>Manage Student-IP Mappings</a>";
-            $useripmappingarray[] = $mform->createElement('static', 'manageiplist', '', $hyperlink_manageip);
-            $mform->addGroup($useripmappingarray, 'enableuseripmapping', get_string('useripmappingrequiredupdate', 'quizaccess_useripmapping'), array(
-                ' '
-            ), false);
-            $mform->addHelpButton('enableuseripmapping', 'useripmappingrequiredupdate', 'quizaccess_useripmapping');
-        } else {
-            $mform->addGroup($useripmappingarray, 'enableuseripmapping', get_string('useripmappingrequiredadd', 'quizaccess_useripmapping'), array(
-                ' '
-            ), false);
-            $mform->addHelpButton('enableuseripmapping', 'useripmappingrequiredadd', 'quizaccess_useripmapping');
-  }
+        $mform->addGroup($useripmappingarray, 'enableuseripmapping', get_string('useripmappingrequired', 'quizaccess_useripmapping'), array(
+            ' '
+        ), false);
+        $mform->addHelpButton('enableuseripmapping', 'useripmappingrequired', 'quizaccess_useripmapping');
         $mform->setAdvanced('enableuseripmapping', true);
-
     }
     public static function save_settings($quiz)
     {

@@ -47,7 +47,7 @@ define(['jquery'], function($) {
 
                 var minutes = Math.floor((countDownTime % (1000 * 60 * 60)) / (1000 * 60));
 
-                var seconds = Math.floor((countDownTime % (1000 * 60)) / 1000);
+//                var seconds = Math.floor((countDownTime % (1000 * 60)) / 1000);
 
                 var daysLeft, hrsLeft, minsLeft;
 
@@ -87,5 +87,5 @@ define(['jquery'], function($) {
                 }
             }, 1000);
         }
-    }
+    };
 });

@@ -74,3 +74,21 @@ function um_validate_user_mapping_columns(csv_import_reader $cir, $stdfields, mo
     }
     return $processed;
 }
+
+
+/**
+ * This function extends the settings navigation block for the site.
+ * It is being called from quiz_extend_settings_navigation function.
+ */
+function useripmapping_accessrule_extend_navigation($accessrulenode, $cm ) {
+    
+    $url = new moodle_url('/mod/quiz/accessrule/useripmapping/managemappings.php',
+        array('quizid'=>$cm->instance,'courseid'=>$cm->course, 'cmid'=>$cm->id));
+    $node = navigation_node::create(get_string('useripmapping', 'quizaccess_useripmapping'),
+        $url,
+        navigation_node::TYPE_SETTING, null, 'quiz_accessrule_useripmapping',
+        new pix_icon('i/item', ''));
+    $managenode =  $accessrulenode->add_node($node);
+    
+    
+}
