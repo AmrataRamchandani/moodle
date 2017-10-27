@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
  * Defines the various forms used by quizaccess_useripmapping plugin.
  *
@@ -22,22 +21,19 @@
  * @copyright  2017 Indian Institute Of Technology,Bombay,India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
-require_once $CFG->libdir . '/formslib.php';
-
+require_once($CFG->libdir . '/formslib.php');
 /**
-* Upload a CVS file with user-ip mapping information.
-*
-* @package    quizaccess_useripmapping
-* @author     Amrata Ramchandani <ramchandani.amrata@gmail.com>
-* @copyright  2017 Indian Institute Of Technology,Bombay,India
-* @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ * Upload a CVS file with user-ip mapping information.
+ *
+ * @package    quizaccess_useripmapping
+ * @author     Amrata Ramchandani <ramchandani.amrata@gmail.com>
+ * @copyright  2017 Indian Institute Of Technology,Bombay,India
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class quizaccess_upload_useripmapping_list extends moodleform
 {
-    function definition()
-    {
+    public function definition() {
         $mform = $this->_form;
         $mform->addElement('filepicker', 'file', get_string('file', 'quizaccess_useripmapping'));
         $mform->addRule('file', null, 'required');
@@ -68,7 +64,6 @@ class quizaccess_upload_useripmapping_list extends moodleform
         $this->add_action_buttons(true, get_string('uploadmappings', 'quizaccess_useripmapping'));
     }
 }
-
 /**
  * Form to add the user-ip mappings after pre-checks.
  *
@@ -79,12 +74,11 @@ class quizaccess_upload_useripmapping_list extends moodleform
  */
 class quizaccess_store_useripmapping_list extends moodleform
 {
-    function definition()
-    {
+    public function definition() {
         $mform   = $this->_form;
         $columns = $this->_customdata['columns'];
         $data    = $this->_customdata['data'];
-        // hidden fields
+        // Hidden fields.
         $mform->addElement('hidden', 'iid');
         $mform->setType('iid', PARAM_INT);
         $mform->addElement('hidden', 'previewrows');
@@ -98,14 +92,15 @@ class quizaccess_store_useripmapping_list extends moodleform
         $actionbuttons = array();
         $actionbuttons[] =& $mform->createElement('submit', 'submit', get_string('confirm', 'quizaccess_useripmapping'));
         $actionbuttons[] =& $mform->createElement('cancel', 'cancel', get_string('cancel', 'quizaccess_useripmapping'));
-        $mform->addGroup($actionbuttons, 'actionbuttons', '', array( ' '), false);
+        $mform->addGroup($actionbuttons, 'actionbuttons', '', array(
+            ' '
+        ), false);
         $mform->disabledIf('submit', 'missingusernames', 'neq', 0);
         $mform->disabledIf('submit', 'missingips', 'neq', 0);
         $mform->disabledIf('submit', 'bothfieldsmissing', 'neq', 0);
         $this->set_data($data);
     }
 }
-
 /**
  * Form to edit the user-ip mapping.
  *
@@ -116,8 +111,7 @@ class quizaccess_store_useripmapping_list extends moodleform
  */
 class quizaccess_edit_useripmapping_list extends moodleform
 {
-    function definition()
-    {
+    public function definition() {
         $mform = $this->_form;
         $mform->addElement('text', 'username', get_string('username', 'quizaccess_useripmapping'));
         $mform->addElement('html', '<div form-group row  fitem id="hide1" >');

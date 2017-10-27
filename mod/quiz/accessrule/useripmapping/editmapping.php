@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
  * Edits the mapped IP Address for the quizaccess_useripmapping plugin.
  *
@@ -22,33 +21,26 @@
  * @copyright  2017 Indian Institute Of Technology,Bombay,India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 require_once('../../../../config.php');
 require_once($CFG->dirroot . '/mod/quiz/accessrule/useripmapping/useripmapping_form.php');
-
 global $CFG, $PAGE, $DB, $OUTPUT;
-
 $quizid       = required_param('quizid', PARAM_INT);
 $courseid     = required_param('courseid', PARAM_INT);
 $cmid         = required_param('cmid', PARAM_INT);
 $coursemodule = get_coursemodule_from_id('quiz', $cmid);
 $context      = context_module::instance($cmid);
-
 require_login($courseid, false, $coursemodule);
 require_capability('mod/quiz:manage', $context);
-
 $returntomanageurl = new moodle_url('/mod/quiz/accessrule/useripmapping/managemappings.php', array(
     'quizid' => $quizid,
     'courseid' => $courseid,
     'cmid' => $cmid
 ));
-
 $returnurl         = new moodle_url('/mod/quiz/accessrule/useripmapping/editmapping.php', array(
     'quizid' => $quizid,
     'courseid' => $courseid,
     'cmid' => $cmid
 ));
-
 $PAGE->requires->css('/mod/quiz/accessrule/useripmapping/style/styles.css');
 $PAGE->requires->jquery();
 $PAGE->set_title('Edit user-IP mapping');
@@ -58,12 +50,10 @@ $PAGE->set_url($CFG->wwwroot . '/mod/quiz/accessrule/useripmapping/editmapping.p
     'courseid' => $courseid,
     'cmid' => $cmid
 ));
-$PAGE->navbar->add(get_string('accessrules', 'quizaccess_useripmapping'),null);
+$PAGE->navbar->add(get_string('accessrules', 'quizaccess_useripmapping'), null);
 $PAGE->navbar->add(get_string('useripmapping', 'quizaccess_useripmapping'), $returntomanageurl);
 $PAGE->navbar->add(get_string('editmapping', 'quizaccess_useripmapping'), $returnurl);
-
 echo $OUTPUT->header();
-
 $form             = new quizaccess_edit_useripmapping_list();
 $quizdata         = array(
     'quizid' => $quizid
@@ -78,22 +68,26 @@ $form->set_data($quizdata);
 $form->set_data($coursedata);
 $form->set_data($coursemoduledata);
 $form->display();
-$PAGE->requires->js_call_amd('quizaccess_useripmapping/edit', 'init');
+ $PAGE->requires->js_call_amd('quizaccess_useripmapping/edit', 'init');
 if ($formdata = $form->is_cancelled()) {
     redirect($returntomanageurl);
-} elseif ($data = $form->get_data()) {
+} else if ($data = $form->get_data()) {
     if (empty($data->idnumber) && !empty($data->username)) {
-        $usernamesql = "select username from mdl_user where CONCAT_WS(' ', firstname, lastname)  LIKE '%" . $data->username . "%'  ";
-    } elseif (empty($data->username) && !empty($data->idnumber)) {
+        $usernamesql = "select username from mdl_user where CONCAT_WS(' ', firstname, lastname)
+                        LIKE '%" . $data->username . "%'  ";
+    } else if (empty($data->username) && !empty($data->idnumber)) {
         $usernamesql = "select username from mdl_user where idnumber LIKE '%" . $data->idnumber . "%' ";
-    } elseif (!empty($data->username) && !empty($data->idnumber)) {
-        $usernamesql = "select username from mdl_user where CONCAT_WS(' ', firstname, lastname)  LIKE '%" . $data->username . "%' AND idnumber LIKE '%" . $data->idnumber . "%' ";
+    } else if (!empty($data->username) && !empty($data->idnumber)) {
+        $usernamesql = "select username from mdl_user where CONCAT_WS(' ', firstname, lastname)
+                        LIKE '%" . $data->username . "%' AND idnumber LIKE '%" . $data->idnumber . "%' ";
     } else {
         echo "Please enter either username or roll number";
     }
     if (!empty($usernamesql)) {
         $username     = $DB->get_fieldset_sql($usernamesql);
-        $timestampsql = 'SELECT username, MAX(timecreated) FROM mdl_quizaccess_useripmappings where quizid=' . $quizid . ' group by username having username IN ("' . implode('", "', $username) . '")';
+        $timestampsql = 'SELECT username, MAX(timecreated) FROM mdl_quizaccess_useripmappings
+                         where quizid=' . $quizid . ' group by username
+                         having username IN ("' . implode('", "', $username) . '")';
         $timestamp    = $DB->get_records_sql_menu($timestampsql);
         if (!empty($username) && !empty($timestamp)) {
             $table = new html_table();
@@ -109,8 +103,9 @@ if ($formdata = $form->is_cancelled()) {
             $srno        = 0;
             foreach ($timestamp as $key => $value) {
                 $srno++;
-                $mappingsql    = "SELECT * FROM mdl_quizaccess_useripmappings WHERE quizid=$quizid AND username='$key' AND timecreated='$value'";
-                $result = $DB->get_records_sql($mappingsql);
+                $mappingsql = "SELECT * FROM mdl_quizaccess_useripmappings WHERE
+                               quizid=$quizid AND username='$key' AND timecreated='$value'";
+                $result     = $DB->get_records_sql($mappingsql);
                 foreach ($result as $record) {
                     $ip                                   = $record->ip;
                     $recordid                             = $record->id;
@@ -122,7 +117,7 @@ if ($formdata = $form->is_cancelled()) {
                         'username' => $username
                     ));
                     $fullname                             = "$firstname $lastname";
-                    $userid                            = $DB->get_field('user', 'idnumber', array(
+                    $userid                               = $DB->get_field('user', 'idnumber', array(
                         'username' => $username
                     ));
                     $timestampinms                        = $record->timecreated;
@@ -153,7 +148,8 @@ if ($formdata = $form->is_cancelled()) {
             echo "No record found with the provided details";
         }
     }
-    $PAGE->requires->js_call_amd('quizaccess_useripmapping/edit', 'editip');
+     $PAGE->requires->js_call_amd('quizaccess_useripmapping/edit', 'editip');
 }
 echo $OUTPUT->footer();
-?>
+
+

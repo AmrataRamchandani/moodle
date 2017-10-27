@@ -8,12 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
-
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /**
  * Implementaton of the quizaccess_useripmapping plugin.
  *
@@ -22,13 +21,9 @@
  * @copyright 2017 Indian Institute Of Technology,Bombay,India
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
-
 require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
-
 global $DB;
-
 /**
  * A rule implementing the user ip mapping check in order to restrict user to attempt
  * quiz from mapped/assigned IP Address
@@ -39,46 +34,45 @@ global $DB;
  */
 class quizaccess_useripmapping extends quiz_access_rule_base
 {
-    public static function make(quiz $quizobj, $timenow, $canignoretimelimits)
-    {
+    public static function make(quiz $quizobj, $timenow, $canignoretimelimits) {
         if (empty($quizobj->get_quiz()->useripmappingrequired)) {
             return null;
         }
         return new self($quizobj, $timenow);
     }
-    public function prevent_new_attempt($numprevattempts, $lastattempt)
-    {
+    public function prevent_new_attempt($numprevattempts, $lastattempt) {
         $username = $_SESSION['USER']->username;
         global $DB;
-        $quizid            = $this->quiz->id;
-        $allowifunassignedsql  = "SELECT allowifunassigned FROM mdl_quizaccess_enable_mappings WHERE quizid=$quizid";
-        $allowifunassigned = $DB->get_field_sql($allowifunassignedsql);
-        $ipsql               = "SELECT ip FROM mdl_quizaccess_useripmappings WHERE username='$username' and quizid=$quizid order by timecreated DESC limit 1";
-        $mapped_ip_address = $DB->get_field_sql($ipsql);
-        $remoteaddr        = getremoteaddr();
-        $ipmismatchmessage1 = get_string('$ipmismatchmessage1', 'quizaccess_useripmapping');
-        $ipmismatchmessage2 = get_string('$ipmismatchmessage2', 'quizaccess_useripmapping');
-        $ipnotassignedmessage= get_string('ipnotassignedmessage', 'quizaccess_useripmapping');
+        $quizid               = $this->quiz->id;
+        $allowifunassignedsql = "SELECT allowifunassigned FROM mdl_quizaccess_enable_mappings WHERE quizid=$quizid";
+        $allowifunassigned    = $DB->get_field_sql($allowifunassignedsql);
+        $ipsql                = "SELECT ip FROM mdl_quizaccess_useripmappings WHERE username='$username' and quizid=$quizid
+                                 order by timecreated DESC limit 1";
+        $mappedipaddress    = $DB->get_field_sql($ipsql);
+        $remoteaddr           = getremoteaddr();
+        $ipmismatchmessage1   = get_string('$ipmismatchmessage1', 'quizaccess_useripmapping');
+        $ipmismatchmessage2   = get_string('$ipmismatchmessage2', 'quizaccess_useripmapping');
+        $ipnotassignedmessage = get_string('ipnotassignedmessage', 'quizaccess_useripmapping');
         if ($allowifunassigned) {
-            if (empty($mapped_ip_address))
+            if (empty($mappedipaddress)) {
                 return false;
-                elseif (address_in_subnet(getremoteaddr(), $mapped_ip_address)) {
-                    return false;
-                } else {
-                    return "$ipmismatchmessage1.$mapped_ip_address.$ipmismatchmessage2";
-                }
+            } else if (address_in_subnet(getremoteaddr(), $mappedipaddress)) {
+                 return false;
+            } else {
+                 return "$ipmismatchmessage1.$mappedipaddress.$ipmismatchmessage2";
+            }
         } else {
-            if (address_in_subnet(getremoteaddr(), $mapped_ip_address)) {
+            if (address_in_subnet(getremoteaddr(), $mappedipaddress)) {
                 return false;
             } else {
-                return $ipnotassignedmessage ;
+                return $ipnotassignedmessage;
             }
         }
     }
-    public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform)
-    {
-        $useripmappingarray = array();
-        $useripmappingarray[] = $mform->createElement('select', 'useripmappingrequired', get_string('useripmappingrequired', 'quizaccess_useripmapping'), array(
+    public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform) {
+        $useripmappingarray   = array();
+        $useripmappingarray[] = $mform->createElement('select', 'useripmappingrequired',
+            get_string('useripmappingrequired', 'quizaccess_useripmapping'), array(
             0 => get_string('notrequired', 'quizaccess_useripmapping'),
             1 => get_string('useripmappingrequiredoption', 'quizaccess_useripmapping')
         ));
@@ -87,14 +81,12 @@ class quizaccess_useripmapping extends quiz_access_rule_base
             1
         ));
         $mform->disabledIf('allowifunassigned', 'useripmappingrequired', 'neq', 1);
-        $mform->addGroup($useripmappingarray, 'enableuseripmapping', get_string('useripmappingrequired', 'quizaccess_useripmapping'), array(
-            ' '
-        ), false);
+        $mform->addGroup($useripmappingarray, 'enableuseripmapping',
+            get_string('useripmappingrequired', 'quizaccess_useripmapping'), array(' '), false);
         $mform->addHelpButton('enableuseripmapping', 'useripmappingrequired', 'quizaccess_useripmapping');
         $mform->setAdvanced('enableuseripmapping', true);
     }
-    public static function save_settings($quiz)
-    {
+    public static function save_settings($quiz) {
         global $DB;
         if (empty($quiz->useripmappingrequired)) {
             $DB->delete_records('quizaccess_enable_mappings', array(
@@ -119,15 +111,13 @@ class quizaccess_useripmapping extends quiz_access_rule_base
             }
         }
     }
-    public static function delete_settings($quiz)
-    {
+    public static function delete_settings($quiz) {
         global $DB;
         $DB->delete_records('quizaccess_enable_mappings', array(
             'quizid' => $quiz->id
         ));
     }
-    public static function get_settings_sql($quizid)
-    {
+    public static function get_settings_sql($quizid) {
         return array(
             'useripmappingrequired',
             'LEFT JOIN {quizaccess_enable_mappings} enable_mappings ON enable_mappings.quizid = quiz.id',

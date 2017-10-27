@@ -43,18 +43,16 @@ $string['rowpreviewnum']               = 'Preview rows';
 $string['subnetwrong']                 = "This computer's IP Address does not match with the assigned IP Address";
 $string['useripmapping']               = 'User-IP mapping';
 $string['useripmappingrequired']       = 'Enable user-IP mapping';
-$string['useripmappingrequired_help']  = 'If you enable this option, users will be able to attempt this quiz only from the 
+$string['useripmappingrequired_help']  = 'If you enable this option, users will be able to attempt this quiz only from the
 specific IP address mapped against their name. On enabling this,user-IP mapping can be managed in the quiz administration block.
 If allow unmapped is checked,users who have not been mapped any IP will also be able to attempt the quiz';
 $string['useripmappingrequiredoption'] = 'Yes';
 $string['uploadmappings']              = 'Upload mapping';
 $string['uploadmappings_help']         = 'User-IP mapping should be uploaded via a CSV file.
 The format of the file is as follows:
-    
 * First line is:username,ip
 * Each following line contains one record containing the username and mapped IP address
-* The field values are separated by a comma (or other delimiters)
-';
+* The field values are separated by a comma (or other delimiters)';
 $string['username']                    = 'User name';
 $string['uploadmappingspreview']       = 'Upload mappings preview';
 $string['viewthelist']                 = 'View';

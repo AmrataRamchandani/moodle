@@ -8,12 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
-
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /**
  * Updates mapped IP Address for the quizaccess_useripmapping plugin.
  *
@@ -22,16 +21,18 @@
  * @copyright 2017 Indian Institute Of Technology,Bombay,India
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 require_once('../../../../config.php');
+require_login();
 global $DB;
 $quizid              = $_POST['quizid'];
 $username            = $_POST['username'];
 $ip                  = $_POST['ip'];
+
+
+
 $record              = new stdClass();
 $record->quizid      = $quizid;
 $record->username    = $username;
 $record->ip          = $ip;
 $record->timecreated = time();
 $DB->insert_record('quizaccess_useripmappings', $record);
-

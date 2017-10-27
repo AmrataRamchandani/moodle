@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -14,7 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
  * Library of functions used by the quizaccess_useripmapping plugin.
  *
@@ -23,6 +21,8 @@
  * @copyright  2017 Indian Institute Of Technology,Bombay,India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Validation callback function - verifies the column line of csv file.
@@ -35,9 +35,7 @@
  *            return url in case of any error
  * @return array list of fields
  */
-
-function um_validate_user_mapping_columns(csv_import_reader $cir, $stdfields, moodle_url $returnurl)
-{
+function um_validate_user_mapping_columns(csv_import_reader $cir, $stdfields, moodle_url $returnurl) {
     $columns = $cir->get_columns();
     if (empty($columns)) {
         $cir->close();
@@ -49,16 +47,16 @@ function um_validate_user_mapping_columns(csv_import_reader $cir, $stdfields, mo
         $cir->cleanup();
         print_error('csvfewcolumns', 'error', $returnurl);
     }
-    // test columns
+    // Test columns.
     $processed = array();
     foreach ($columns as $key => $unused) {
         $field   = $columns[$key];
         $lcfield = core_text::strtolower($field);
         if (in_array($field, $stdfields) or in_array($lcfield, $stdfields)) {
-            // standard fields are only lowercase
+            // Standard fields are only lowercase.
             $newfield = $lcfield;
         } else if (preg_match('/^(sysrole|cohort|course|group|type|role|enrolperiod|enrolstatus)\d+$/', $lcfield)) {
-            // special fields for enrolments
+            // Special fields for enrolments.
             $newfield = $lcfield;
         } else {
             $cir->close();
@@ -74,21 +72,17 @@ function um_validate_user_mapping_columns(csv_import_reader $cir, $stdfields, mo
     }
     return $processed;
 }
-
-
 /**
  * This function extends the settings navigation block for the site.
  * It is being called from quiz_extend_settings_navigation function.
  */
-function useripmapping_accessrule_extend_navigation($accessrulenode, $cm ) {
-    
-    $url = new moodle_url('/mod/quiz/accessrule/useripmapping/managemappings.php',
-        array('quizid'=>$cm->instance,'courseid'=>$cm->course, 'cmid'=>$cm->id));
-    $node = navigation_node::create(get_string('useripmapping', 'quizaccess_useripmapping'),
-        $url,
-        navigation_node::TYPE_SETTING, null, 'quiz_accessrule_useripmapping',
-        new pix_icon('i/item', ''));
-    $managenode =  $accessrulenode->add_node($node);
-    
-    
+function useripmapping_accessrule_extend_navigation($accessrulenode, $cm) {
+    $url        = new moodle_url('/mod/quiz/accessrule/useripmapping/managemappings.php', array(
+        'quizid' => $cm->instance,
+        'courseid' => $cm->course,
+        'cmid' => $cm->id
+    ));
+    $node       = navigation_node::create(get_string('useripmapping', 'quizaccess_useripmapping'), $url,
+                  navigation_node::TYPE_SETTING, null, 'quiz_accessrule_useripmapping', new pix_icon('i/item', ''));
+    $managenode = $accessrulenode->add_node($node);
 }

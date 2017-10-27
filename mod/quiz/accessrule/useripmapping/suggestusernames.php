@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
  * Suggest list of usernames based on a particular string for the quizaccess_useripmapping plugin.
  *
@@ -22,18 +21,18 @@
  * @copyright  2017 Indian Institute Of Technology,Bombay,India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 require_once('../../../../config.php');
+require_login();
 global $DB;
+
 if (!empty($_POST["keyword"])) {
-    $name      = $_POST["keyword"];
-    $usernamesql       = "SELECT * FROM (SELECT CONCAT(firstname, ' ', lastname) as fullname FROM mdl_user) base WHERE fullname LIKE '%" . $name . "%' ";
-    $usernames = $DB->get_fieldset_sql($usernamesql);
+    $name        = $_POST["keyword"];
+    $usersql = "SELECT * FROM (SELECT CONCAT(firstname, ' ', lastname) as fullname FROM mdl_user) base
+                WHERE fullname LIKE '%" . $name . "%' ";
+    $usernames   = $DB->get_fieldset_sql($usersql);
     if (count($usernames) > 0) {
         foreach ($usernames as $username) {
             echo "<li>$username</li>";
         }
     }
 }
-
-

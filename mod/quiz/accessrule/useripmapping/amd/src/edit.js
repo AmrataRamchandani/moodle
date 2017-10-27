@@ -21,7 +21,6 @@
  * @copyright  2017 Indian Institute Of Technology,Bombay,India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-		
 define(['jquery'], function($) {
     return {
         init: function() {
@@ -70,7 +69,6 @@ define(['jquery'], function($) {
                             username: username,
                             ip: value
                         }
-
                     });
                     $(this).blur();
                     $('.fa-pencil').show();
